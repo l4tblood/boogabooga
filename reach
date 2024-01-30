@@ -111,7 +111,6 @@ local dropdown = MapsSection:AddDropdown("Teleport", {"Spawn", "500k world", "5m
     selectedWorld = chosenWorld
 end)
 
--- Add the button to the MapsSection
 MapsSection:AddButton("Teleport", function()
     teleportToWorld()
 end)
