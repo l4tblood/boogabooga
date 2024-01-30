@@ -82,7 +82,7 @@ MiscSection:AddToggle("Speed", false, function(toggleOn)
     end
 end)
 
-MiscSection:AddSlider("Speed Value", 0, 120, 2000, 1, function(sliderValue)
+MiscSection:AddSlider("Speed Value", 0, 75, 75, 1, function(sliderValue)
     customSpeed = sliderValue
     if speedToggle then
         game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = customSpeed
