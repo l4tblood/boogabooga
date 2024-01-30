@@ -1,0 +1,43 @@
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/l4tblood/boogabooga/main/lib.lua"))()
+local Window = Library:CreateWindow("Hyper Escape EXAMPLE", Vector2.new(492, 598), Enum.KeyCode.RightControl)
+local AimbotTab = Window:CreateTab("Aimbot")
+
+local ReachSettings = {
+    ReachEnabled = false,
+    ReachDistance = 15,
+}
+
+local ReachSection = AimbotTab:CreateSector("Reach Settings", "left")
+
+ReachSection:AddToggle("Enable Reach", ReachSettings.ReachEnabled, function(enabled)
+    ReachSettings.ReachEnabled = enabled
+end)
+
+ReachSection:AddSlider("Reach Distance", 0, 30, ReachSettings.ReachDistance, 0.1, function(distance)
+    ReachSettings.ReachDistance = distance
+end)
+
+RunService.Stepped:Connect(function()
+    if ReachSettings.ReachEnabled then
+        local success, error = pcall(function()
+            local Handle = Players.LocalPlayer.Character:FindFirstChildOfClass("Tool").Handle
+            for _, Player in pairs(Players:GetPlayers()) do
+                local Character = Player.Character
+                if Character and Character ~= Players.LocalPlayer.Character and Character.Humanoid.Health ~= 0 and (Character.HumanoidRootPart.Position - Handle.Position).Magnitude <= ReachSettings.ReachDistance then
+                    Character["Left Arm"]:BreakJoints()
+                    Character["Left Leg"]:BreakJoints()
+                    Character["Right Leg"]:BreakJoints()
+                    Character["Left Arm"].CFrame = Handle.CFrame
+                    Character["Left Leg"].CFrame = Handle.CFrame
+                    Character["Right Leg"].CFrame = Handle.CFrame
+                    Character["Left Arm"].Transparency = 1
+                    Character["Left Leg"].Transparency = 1
+                    Character["Right Leg"].Transparency = 1
+                end
+            end
+        end)
+    end
+end)
