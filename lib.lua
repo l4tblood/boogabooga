@@ -11,7 +11,7 @@ local runservice = game:GetService("RunService")
 local tweenservice = game:GetService("TweenService")
 local marketplaceservice = game:GetService("MarketplaceService")
 local textservice = game:GetService("TextService")
-local coregui = game.CoreGui
+local coregui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 local httpservice = game:GetService("HttpService")
 
 local player = players.LocalPlayer
@@ -44,32 +44,7 @@ library.theme = {
 	itemscolor2 = Color3.fromRGB(210, 210, 210)
 }
 
-if library.theme.cursor and Drawing then
-	local success = pcall(function() 
-		library.cursor = Drawing.new("Image")
-		library.cursor.Data = game:HttpGet(library.theme.cursorimg)
-		library.cursor.Size = Vector2.new(64, 64)
-		library.cursor.Visible = uis.MouseEnabled
-		library.cursor.Rounding = 0
-		library.cursor.Position = Vector2.new(mouse.X - 32, mouse.Y + 6)
-	end)
-	if success and library.cursor then
-		uis.InputChanged:Connect(function(input)
-			if uis.MouseEnabled then
-				if input.UserInputType == Enum.UserInputType.MouseMovement then
-					library.cursor.Position = Vector2.new(input.Position.X - 32, input.Position.Y + 7)
-				end
-			end
-		end)
 
-		game:GetService("RunService").RenderStepped:Connect(function()
-			uis.OverrideMouseIconBehavior = Enum.OverrideMouseIconBehavior.ForceHide
-			library.cursor.Visible = uis.MouseEnabled and (uis.MouseIconEnabled or game:GetService("GuiService").MenuIsOpen)
-		end)
-	elseif not success and library.cursor then
-		library.cursor:Remove()
-	end
-end
 
 function library:CreateWatermark(name, position)
 	local gamename = marketplaceservice:GetProductInfo(game.PlaceId).Name
@@ -79,11 +54,7 @@ function library:CreateWatermark(name, position)
 
 	watermark.main = Instance.new("ScreenGui", coregui)
 	watermark.main.Name = "Watermark"
-
-	if getgenv().watermark then
-		getgenv().watermark:Remove()
-	end
-	getgenv().watermark = watermark.main
+	
 
 	watermark.mainbar = Instance.new("Frame", watermark.main)
 	watermark.mainbar.Name = "Main"
@@ -228,10 +199,7 @@ function library:CreateWindow(name, size, hidebutton)
 	window.Main = Instance.new("ScreenGui", coregui)
 	window.Main.Name = name
 	window.Main.DisplayOrder = 15
-	if getgenv().uilib then
-		getgenv().uilib:Remove()
-	end
-	getgenv().uilib = window.Main
+	
 
 	local dragging, dragInput, dragStart, startPos
 	uis.InputChanged:Connect(function(input)
@@ -3518,6 +3486,7 @@ function library:CreateWindow(name, size, hidebutton)
 
 			return configSystem
 		end
+
 
 		table.insert(window.Tabs, tab)
 		return tab
