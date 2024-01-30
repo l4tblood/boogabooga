@@ -91,16 +91,26 @@ end)
 
 local MapsSection = AimbotTab:CreateSector("Maps", "left")
 
-MapsSection:AddDropdown("Teleport", {"Spawn", "500k world", "5m world", "50m world", "500m world"}, "Worlds", true, function(dropdown)
-    if dropdown == "Spawn" then
+local selectedWorld = "Spawn"
+
+local function teleportToWorld()
+    if selectedWorld == "Spawn" then
         SpawnTP()
-    elseif dropdown == "500k world" then
+    elseif selectedWorld == "500k world" then
         Map2TP()
-    elseif dropdown == "5m world" then
+    elseif selectedWorld == "5m world" then
         Map3TP()
-    elseif dropdown == "50m world" then
+    elseif selectedWorld == "50m world" then
         Map4TP()
-    elseif dropdown == "500m world" then
+    elseif selectedWorld == "500m world" then
         Map5TP()
     end
+end
+
+local dropdown = MapsSection:AddDropdown("Teleport", {"Spawn", "500k world", "5m world", "50m world", "500m world"}, "", true, function(chosenWorld)
+    selectedWorld = chosenWorld
+end)
+
+MiscSection:AddButton("Teleport", function()
+    teleportToWorld()
 end)
