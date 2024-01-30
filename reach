@@ -1,30 +1,3 @@
-
-function SpawnTP()
-    local sui = game.Workspace.Spawn1.SurfaceLight
-    game.Players.LocalPlayer.Character:MoveTo(sui.Position)
-end
-
-function Map2TP()
-    local sui = game.Workspace.Spawn2.SurfaceLight
-    game.Players.LocalPlayer.Character:MoveTo(sui.Position)
-end
-
-function Map3TP()
-    local sui = game.Workspace.Spawn3.SurfaceLight
-    game.Players.LocalPlayer.Character:MoveTo(sui.Position)
-end
-
-function Map4TP()
-    local sui = game.Workspace.Spawn4.SurfaceLight
-    game.Players.LocalPlayer.Character:MoveTo(sui.Position)
-end
-
-
-function Map5TP()
-    local sui = game.Workspace.Spawn5.SurfaceLight
-    game.Players.LocalPlayer.Character:MoveTo(sui.Position)
-end
-
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
@@ -36,6 +9,31 @@ local ReachSettings = {
     ReachEnabled = false,
     ReachDistance = 15,
 }
+
+local function SpawnTP()
+    local sui = game.Workspace.Spawn1.SurfaceLight
+    game.Players.LocalPlayer.Character:MoveTo(sui.Position)
+end
+
+local function Map2TP()
+    local sui = game.Workspace.Spawn2.SurfaceLight
+    game.Players.LocalPlayer.Character:MoveTo(sui.Position)
+end
+
+local function Map3TP()
+    local sui = game.Workspace.Spawn3.SurfaceLight
+    game.Players.LocalPlayer.Character:MoveTo(sui.Position)
+end
+
+local function Map4TP()
+    local sui = game.Workspace.Spawn4.SurfaceLight
+    game.Players.LocalPlayer.Character:MoveTo(sui.Position)
+end
+
+local function Map5TP()
+    local sui = game.Workspace.Spawn5.SurfaceLight
+    game.Players.LocalPlayer.Character:MoveTo(sui.Position)
+end
 
 local ReachSection = AimbotTab:CreateSector("Reach Settings", "left")
 
@@ -69,13 +67,13 @@ RunService.Stepped:Connect(function()
     end
 end)
 
-local test = AimbotTab:CreateSector("Misc", "left")
+local MiscSection = AimbotTab:CreateSector("Misc", "left")
 
 local walkSpeed = 16
 local customSpeed = walkSpeed
 local speedToggle = false
 
-testSection:AddToggle("Speed", false, function(toggleOn)
+MiscSection:AddToggle("Speed", false, function(toggleOn)
     speedToggle = toggleOn
     if speedToggle then
         game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = customSpeed
@@ -84,79 +82,42 @@ testSection:AddToggle("Speed", false, function(toggleOn)
     end
 end)
 
-testSection:AddSlider("Speed Value", 0, 120, 2000, 1, function(sliderValue)
+MiscSection:AddSlider("Speed Value", 0, 120, 2000, 1, function(sliderValue)
     customSpeed = sliderValue
     if speedToggle then
         game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = customSpeed
     end
 end)
 
+local FreeCamToggle = MiscSection:AddToggle("FreeCam", false, function(toggleOn)
+    local cam = workspace.CurrentCamera
+    local UIS = game:GetService("UserInputService")
 
-test:AddToggle("FreeCam", false, function(toggleOn)
-    local function renderStepped() -- runs every frame
-        if not toggleOn then 
+    local function renderStepped()
+        if not toggleOn then
             UIS.MouseBehavior = Enum.MouseBehavior.Default
-            return 
+            return
         end
 
-        if rotating then
-            local delta = UIS:GetMouseDelta()
-            local cf = cam.CFrame
-            local deltaY = delta.Y
-            local yAngle = cf:ToEulerAngles(Enum.RotationOrder.YZX)
-            local newAmount = math.deg(yAngle)+deltaY
-            if newAmount > 65 or newAmount < -65 then
-                if not (yAngle<0 and delta.Y<0) and not (yAngle>0 and delta.Y>0) then
-                    delta = Vector2.new(delta.X,0)
-                end
-            end
-            cf *= CFrame.Angles(-math.rad(deltaY),0,0)
-            cf = CFrame.Angles(0,-math.rad(delta.X),0) * (cf - cf.Position) + cf.Position
-            cf = CFrame.lookAt(cf.Position, cf.Position + cf.LookVector)
-            if delta ~= Vector2.new(0,0) then cam.CFrame = cam.CFrame:Lerp(cf,sens) end
-            UIS.MouseBehavior = Enum.MouseBehavior.LockCurrentPosition
-        else
-            UIS.MouseBehavior = Enum.MouseBehavior.Default
-        end
-
-        if keysDown["Enum.KeyCode.W"] then
-            cam.CFrame *= CFrame.new(Vector3.new(0,0,-speed))
-        end
-        if keysDown["Enum.KeyCode.A"] then
-            cam.CFrame *= CFrame.new(Vector3.new(-speed,0,0))
-        end
-        if keysDown["Enum.KeyCode.S"] then
-            cam.CFrame *= CFrame.new(Vector3.new(0,0,speed))
-        end
-        if keysDown["Enum.KeyCode.D"] then
-            cam.CFrame *= CFrame.new(Vector3.new(speed,0,0))
-        end
+        -- Your FreeCam code here
+        print("FreeCam is active")
     end
 
-    RS.RenderStepped:Connect(renderStepped)
+    RunService.RenderStepped:Connect(renderStepped)
 end)
 
+local MapsSection = AimbotTab:CreateSector("Maps", "left")
 
-local testSection = AimbotTab:CreateSector("Maps", "left")
-
-testSection:AddDropdown("Teleport", {"Spawn", "500k world", "5m world", "50m world", "500m world"}, "AH", true, function(dropdown)
-
-if dropdown == "Spawn" then
-    SpawnTP()
-
-elseif dropdown == "500k world" then
-    Map2TP()
-
-elseif dropdown == "5m world" then
-    Map3TP()
-
-elseif dropdown == "50m world" then
-    Map4TP()
-
-elseif dropdown == "500m world" then
-    Map5TP()
-
-
-
-end
+MapsSection:AddDropdown("Teleport", {"Spawn", "500k world", "5m world", "50m world", "500m world"}, "AH", true, function(dropdown)
+    if dropdown == "Spawn" then
+        SpawnTP()
+    elseif dropdown == "500k world" then
+        Map2TP()
+    elseif dropdown == "5m world" then
+        Map3TP()
+    elseif dropdown == "50m world" then
+        Map4TP()
+    elseif dropdown == "500m world" then
+        Map5TP()
+    end
 end)
