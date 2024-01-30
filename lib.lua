@@ -53,6 +53,7 @@ function library:CreateWatermark(name, position)
 	watermark.text = " " .. name:gsub("{game}", gamename):gsub("{fps}", "0 FPS") .. " "
 
 	watermark.main = Instance.new("ScreenGui", coregui)
+	watermark.main.ResetOnSpawn = false
 	watermark.main.Name = "Watermark"
 	
 
