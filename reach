@@ -89,23 +89,6 @@ MiscSection:AddSlider("Speed Value", 0, 120, 2000, 1, function(sliderValue)
     end
 end)
 
-local FreeCamToggle = MiscSection:AddToggle("FreeCam", false, function(toggleOn)
-    local cam = workspace.CurrentCamera
-    local UIS = game:GetService("UserInputService")
-
-    local function renderStepped()
-        if not toggleOn then
-            UIS.MouseBehavior = Enum.MouseBehavior.Default
-            return
-        end
-
-        -- Your FreeCam code here
-        print("FreeCam is active")
-    end
-
-    RunService.RenderStepped:Connect(renderStepped)
-end)
-
 local MapsSection = AimbotTab:CreateSector("Maps", "left")
 
 MapsSection:AddDropdown("Teleport", {"Spawn", "500k world", "5m world", "50m world", "500m world"}, "AH", true, function(dropdown)
