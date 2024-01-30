@@ -2,8 +2,8 @@ local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/l4tblood/boogabooga/main/lib.lua"))()
-local Window = Library:CreateWindow("Hyper Escape EXAMPLE", Vector2.new(492, 598), Enum.KeyCode.RightControl)
-local AimbotTab = Window:CreateTab("Aimbot")
+local Window = Library:CreateWindow("Steal time from others (Modded)", Vector2.new(492, 598), Enum.KeyCode.RightControl)
+local AimbotTab = Window:CreateTab("Main")
 
 local ReachSettings = {
     ReachEnabled = false,
@@ -16,7 +16,7 @@ ReachSection:AddToggle("Enable Reach", ReachSettings.ReachEnabled, function(enab
     ReachSettings.ReachEnabled = enabled
 end)
 
-ReachSection:AddSlider("Reach Distance", 0, 30, ReachSettings.ReachDistance, 0.1, function(distance)
+ReachSection:AddSlider("Stud", 0, 30, ReachSettings.ReachDistance, 0.1, function(distance)
     ReachSettings.ReachDistance = distance
 end)
 
