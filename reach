@@ -95,7 +95,7 @@ local selectedMap = nil
 
 local function teleportToSelectedMap()
     if selectedMap then
-        local mapNameLower = string.lower(selectedMap) -- Convert to lowercase for case-insensitive comparison
+        local mapNameLower = string.lower(selectedMap.Text) -- Access the 'Text' property of the selected item
         if mapNameLower == "spawn" then
             SpawnTP()
         elseif mapNameLower == "500k world" then
@@ -113,6 +113,7 @@ local function teleportToSelectedMap()
         print("No map selected")
     end
 end
+
 
 local dropdown = MapsSection:AddDropdown("Teleport", {"Spawn", "500k world", "5m world", "50m world", "500m world"}, "Worlds", true, function(value)
     selectedMap = value
