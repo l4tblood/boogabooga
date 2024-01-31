@@ -252,6 +252,7 @@ ExtraSection:AddToggle("Blatant Mode", false, function(toggleState)
 end)
 
 
+
 local LocalPlayer = Players.LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
 local HighlightColor = Color3.fromRGB(255, 0, 0)
