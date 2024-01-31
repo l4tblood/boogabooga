@@ -93,24 +93,27 @@ local MapsSection = AimbotTab:CreateSector("Maps", "left")
 
 local selectedMap = nil
 
--- Function to determine what to teleport to based on dropdown selection
 local function teleportToSelectedMap()
-    if selectedMap == "Spawn" then
-        SpawnTP()
-    elseif selectedMap == "500k world" then
-        Map2TP()
-    elseif selectedMap == "5m world" then
-        Map3TP()
-    elseif selectedMap == "50m world" then
-        Map4TP()
-    elseif selectedMap == "500m world" then
-        Map5TP()
+    if selectedMap then
+        local mapNameLower = string.lower(selectedMap) -- Convert to lowercase for case-insensitive comparison
+        if mapNameLower == "spawn" then
+            SpawnTP()
+        elseif mapNameLower == "500k world" then
+            Map2TP()
+        elseif mapNameLower == "5m world" then
+            Map3TP()
+        elseif mapNameLower == "50m world" then
+            Map4TP()
+        elseif mapNameLower == "500m world" then
+            Map5TP()
+        else
+            print("Selected map is not recognized") -- optional: handle unknown selection
+        end
     else
-        print("Selected map is not recognized") -- optional: handle unknown selection
+        print("No map selected")
     end
 end
 
--- Creating the dropdown and passing the values
 local dropdown = MapsSection:AddDropdown("Teleport", {"Spawn", "500k world", "5m world", "50m world", "500m world"}, "Worlds", true, function(value)
     selectedMap = value
 end)
