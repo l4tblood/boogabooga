@@ -11,7 +11,7 @@ local ReachSettings = {
 }
 
 local function SpawnTP()
-    local sui = game.Workspace.Spawn1.SurfaceLight
+    local sui = game.Workspace.Spawn.SurfaceLight
     game.Players.LocalPlayer.Character:MoveTo(sui.Position)
 end
 
@@ -82,7 +82,7 @@ MiscSection:AddToggle("Speed", false, function(toggleOn)
     end
 end)
 
-MiscSection:AddSlider("Speed Value", 0, 75, 75, 1, function(sliderValue)
+MiscSection:AddSlider("Speed Value", 0, 48, 48, 1, function(sliderValue)
     customSpeed = sliderValue
     if speedToggle then
         game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = customSpeed
