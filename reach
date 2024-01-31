@@ -91,9 +91,6 @@ end)
 
 local MapsSection = AimbotTab:CreateSector("Maps", "left")
 
-
-local MapsSection = AimbotTab:CreateSector("Maps", "left")
-
 MapsSection:AddButton("Teleport to Spawn", function()
     local sui = game.Workspace.Spawn1.SurfaceLight
     game.Players.LocalPlayer.Character:MoveTo(sui.Position)
