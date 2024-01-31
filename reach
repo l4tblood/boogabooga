@@ -232,8 +232,11 @@ local function aimAtNearestPlayer()
 end
 
 local function onInputBegan(input, gameProcessedEvent)
-    if States.AutoAim and input.KeyCode == Enum.KeyCode.B then
+    if States.Enabled and input.KeyCode == Enum.KeyCode.B then
         States.AutoAim = not States.AutoAim
+        if States.AutoAim then
+            aimAtNearestPlayer()
+        end
     end
 end
 
