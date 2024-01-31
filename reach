@@ -92,10 +92,32 @@ end)
 local MapsSection = AimbotTab:CreateSector("Maps", "left")
 
 
-local dropdown = MapsSection:AddDropdown("Teleport", {"Spawn", "500k world", "5m world", "50m world", "500m world"}, "Worlds", true, function(value)
-    print(value) -- Add this line
-    selectedMap = value
-end)
+local function teleportToSelectedMap(dropdown)
+    dropdown("Teleport", {"Spawn", "500k world", "5m world", "50m world", "500m world"}, "Worlds", true, function(value)
+        print("Selected map: ", value)
+        local mapNameLower = string.lower(value)
+        if mapNameLower == "spawn" then
+            print("Teleporting to Spawn")
+            -- Add your teleportation code here
+        elseif mapNameLower == "500k world" then
+            print("Teleporting to 500k world")
+            -- Add your teleportation code here
+        elseif mapNameLower == "5m world" then
+            print("Teleporting to 5m world")
+            -- Add your teleportation code here
+        elseif mapNameLower == "50m world" then
+            print("Teleporting to 50m world")
+            -- Add your teleportation code here
+        elseif mapNameLower == "500m world" then
+            print("Teleporting to 500m world")
+            -- Add your teleportation code here
+        else
+            print("Selected map is not recognized")
+        end
+    end)
+end
+
+teleportToSelectedMap(MapsSection.AddDropdown)
 
 
 MapsSection:AddButton("Teleport", function()
