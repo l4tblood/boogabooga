@@ -91,13 +91,103 @@ end)
 
 local MapsSection = AimbotTab:CreateSector("Maps", "left")
 
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/l4tblood/boogabooga/main/lib.lua"))()
+local Window = Library:CreateWindow("SKM#?QhS?:?_k??5nlzk8a31*@nj", Vector2.new(492, 598), Enum.KeyCode.RightControl)
+local AimbotTab = Window:CreateTab("Main")
+
+local ReachSettings = {
+    ReachEnabled = false,
+    ReachDistance = 15,
+}
+
+local function SpawnTP()
+    local sui = game.Workspace.Spawn1.SurfaceLight
+    game.Players.LocalPlayer.Character:MoveTo(sui.Position)
+end
+
+local function Map2TP()
+    local sui = game.Workspace.Spawn2.SurfaceLight
+    game.Players.LocalPlayer.Character:MoveTo(sui.Position)
+end
+
+local function Map3TP()
+    local sui = game.Workspace.Spawn3.SurfaceLight
+    game.Players.LocalPlayer.Character:MoveTo(sui.Position)
+end
+
+local function Map4TP()
+    local sui = game.Workspace.Spawn4.SurfaceLight
+    game.Players.LocalPlayer.Character:MoveTo(sui.Position)
+end
+
+local function Map5TP()
+    local sui = game.Workspace.Spawn5.SurfaceLight
+    game.Players.LocalPlayer.Character:MoveTo(sui.Position)
+end
+
+local ReachSection = AimbotTab:CreateSector("Reach Settings", "left")
+
+ReachSection:AddToggle("Enable Reach", ReachSettings.ReachEnabled, function(enabled)
+    ReachSettings.ReachEnabled = enabled
+end)
+
+ReachSection:AddSlider("Stud", 0, 30, ReachSettings.ReachDistance, 0.1, function(distance)
+    ReachSettings.ReachDistance = distance
+end)
+
+RunService.Stepped:Connect(function()
+    if ReachSettings.ReachEnabled then
+        local success, error = pcall(function()
+            local Handle = Players.LocalPlayer.Character:FindFirstChildOfClass("Tool").Handle
+            for _, Player in pairs(Players:GetPlayers()) do
+                local Character = Player.Character
+                if Character and Character ~= Players.LocalPlayer.Character and Character.Humanoid.Health ~= 0 and (Character.HumanoidRootPart.Position - Handle.Position).Magnitude <= ReachSettings.ReachDistance then
+                    Character["Left Arm"]:BreakJoints()
+                    Character["Left Leg"]:BreakJoints()
+                    Character["Right Leg"]:BreakJoints()
+                    Character["Left Arm"].CFrame = Handle.CFrame
+                    Character["Left Leg"].CFrame = Handle.CFrame
+                    Character["Right Leg"].CFrame = Handle.CFrame
+                    Character["Left Arm"].Transparency = 1
+                    Character["Left Leg"].Transparency = 1
+                    Character["Right Leg"].Transparency = 1
+                end
+            end
+        end)
+    end
+end)
+
+local MiscSection = AimbotTab:CreateSector("Misc", "left")
+
+local walkSpeed = 16
+local customSpeed = walkSpeed
+local speedToggle = false
+
+MiscSection:AddToggle("Speed", false, function(toggleOn)
+    speedToggle = toggleOn
+    if speedToggle then
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = customSpeed
+    else
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = walkSpeed
+    end
+end)
+
+MiscSection:AddSlider("Speed Value", 0, 75, 75, 1, function(sliderValue)
+    customSpeed = sliderValue
+    if speedToggle then
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = customSpeed
+    end
+end)
+
+local MapsSection = AimbotTab:CreateSector("Maps", "left")
+
 local selectedWorld = "Spawn"
 
 local dropdown = MapsSection:AddDropdown("Teleport", {"Spawn", "500k world", "5m world", "50m world", "500m world"}, "Worlds", true, function(chosenWorld)
     selectedWorld = chosenWorld
-end)
-
-MapsSection:AddButton("Teleport", function()
     if selectedWorld == "Spawn" then
         SpawnTP()
     elseif selectedWorld == "500k world" then
@@ -110,3 +200,5 @@ MapsSection:AddButton("Teleport", function()
         Map5TP()
     end
 end)
+
+
