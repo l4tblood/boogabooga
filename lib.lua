@@ -200,7 +200,7 @@ function library:CreateWindow(name, size, hidebutton)
 	window.Main = Instance.new("ScreenGui", coregui)
 	window.Main.Name = name
 	window.Main.DisplayOrder = 15
-	
+	window.Main.ResetOnSpawn = false
 
 	local dragging, dragInput, dragStart, startPos
 	uis.InputChanged:Connect(function(input)
