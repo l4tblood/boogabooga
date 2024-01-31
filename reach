@@ -89,6 +89,40 @@ MiscSection:AddSlider("Speed Value", 0, 75, 75, 1, function(sliderValue)
     end
 end)
 
+MiscSection:AddButton("Click TP Tool", function()
+    local tool = Instance.new("Tool")
+    tool.RequiresHandle = false
+    tool.Name = "Click TP"
+    tool.Parent = game.Players.LocalPlayer.Backpack
+    
+    local mouse = game.Players.LocalPlayer:GetMouse()
+    
+    local function teleport()
+        local pos = mouse.Hit + Vector3.new(0,2.5,0)
+        if valid(pos) then
+            pos = CFrame.new(pos.X,pos.Y,pos.Z)
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = pos
+        end
+    end
+    
+    function valid(pos)
+        return pos.Y >= 0 and pos.Y <= 50
+    end
+    
+    local connection
+    
+    tool.Equipped:Connect(function()
+        connection = mouse.Button1Down:Connect(teleport)
+    end)
+    
+    tool.Unequipped:Connect(function()
+        if connection then
+            connection:Disconnect()
+            connection = nil
+        end
+    end)
+end)
+
 local MapsSection = AimbotTab:CreateSector("Maps", "left")
 
 MapsSection:AddButton("Teleport to Spawn", function()
