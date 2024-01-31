@@ -149,7 +149,7 @@ end)
 
 local ExtraSection = AimbotTab:CreateSector("Extra+", "right")
 
-ExtraSection:AddToggle("Toggle", false, function(first)
+ExtraSection:AddToggle("Blatant Mode", false, function(first)
     local Players = game:GetService("Players")
     local UserInputService = game:GetService("UserInputService")
     local RunService = game:GetService("RunService")
@@ -250,3 +250,115 @@ ExtraSection:AddToggle("Toggle", false, function(first)
     a.Chatted:Connect(w)
 end)
 
+local LocalPlayer = Players.LocalPlayer
+local Mouse = LocalPlayer:GetMouse()
+local HighlightColor = Color3.fromRGB(255, 0, 0)
+
+local highlightedCharacter = nil
+local highlightObject = nil
+local labelObject = nil
+local targetPlayer = nil
+local snipeEnabled = false
+
+local function createHighlight(character)
+    local highlight = Instance.new("SelectionBox")
+    highlight.Name = "Highlight"
+    highlight.Adornee = character.PrimaryPart
+    highlight.Color3 = HighlightColor
+    highlight.LineThickness = 0.05
+    highlight.Transparency = 0.5
+    highlight.Parent = character.PrimaryPart
+    return highlight
+end
+
+local function createLabel(character)
+    local billboardGui = Instance.new("BillboardGui")
+    local textLabel = Instance.new("TextLabel")
+
+    billboardGui.Adornee = character.PrimaryPart
+    billboardGui.Size = UDim2.new(0, 100, 0, 50)
+    billboardGui.StudsOffset = Vector3.new(0, 5, 0)
+    billboardGui.Parent = character.PrimaryPart
+
+    textLabel.BackgroundTransparency = 1
+    textLabel.Size = UDim2.new(0, 100, 0, 50)
+    textLabel.Font = Enum.Font.SourceSansBold
+    textLabel.Text = "Snipe"
+    textLabel.TextColor3 = Color3.new(1, 0, 0)
+    textLabel.TextScaled = true
+    textLabel.Parent = billboardGui
+
+    return billboardGui
+end
+
+local function toggleSnipeScript(toggleValue)
+    snipeEnabled = toggleValue
+
+    if not snipeEnabled then
+        if highlightObject then
+            highlightObject:Destroy()
+            highlightObject = nil
+            highlightedCharacter = nil
+        end
+
+        if labelObject then
+            labelObject:Destroy()
+            labelObject = nil
+        end
+    end
+end
+
+ExtraSection:AddToggle("Snipe Script", false, toggleSnipeScript)
+
+RunService.RenderStepped:Connect(function()
+    if not snipeEnabled then return end
+
+    local Target = Mouse.Target
+    if Target then
+        local player = Players:GetPlayerFromCharacter(Target.Parent)
+        if player and player ~= LocalPlayer then
+            if highlightedCharacter ~= player.Character then
+                if highlightObject then
+                    highlightObject:Destroy()
+                end
+                if labelObject then
+                    labelObject:Destroy()
+                end
+                highlightedCharacter = player.Character
+                highlightObject = createHighlight(highlightedCharacter)
+                labelObject = createLabel(highlightedCharacter)
+            end
+        else
+            if highlightObject then
+                highlightObject:Destroy()
+                highlightObject = nil
+                highlightedCharacter = nil
+            end
+            if labelObject then
+                labelObject:Destroy()
+                labelObject = nil
+            end
+        end
+    end
+end)
+
+UserInputService.InputBegan:Connect(function(input)
+    if not snipeEnabled or input.UserInputType ~= Enum.UserInputType.MouseButton1 then return end
+
+    local target = Mouse.Target
+    if target then
+        targetPlayer = Players:GetPlayerFromCharacter(target.Parent)
+        if targetPlayer and targetPlayer ~= LocalPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame = targetPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame
+        end
+    end
+end)
+
+RunService.RenderStepped:Connect(function()
+    if not snipeEnabled or not targetPlayer or not targetPlayer.Character or not targetPlayer.Character:FindFirstChild("HumanoidRootPart") or targetPlayer.Character:FindFirstChild("Humanoid").Health <= 0 then
+        targetPlayer = nil
+        return
+    end
+
+    LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame = targetPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame - Vector3.new(0, 5, 0)
+end)
