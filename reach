@@ -149,145 +149,133 @@ end)
 
 local ExtraSection = AimbotTab:CreateSector("Extra+", "right")
 
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Parent = game.Players.LocalPlayer.PlayerGui
+local a = Instance.new("ScreenGui")
+a.Parent = game.Players.LocalPlayer.PlayerGui
 
-local States = {
-    AutoAim = false,
-    Mode = 1,
-    Enabled = false
-}
+local b = {AutoAim = false, Mode = 1, Enabled = false}
+local c = {}
 
-local guiElements = {}
+local function d()
+    local e = Instance.new("Frame", a)
+    e.Name = "AutoAimFrame"
+    e.BackgroundTransparency = 1
+    e.Position = UDim2.new(0.007, 0, 0.938, 0)
+    e.Size = UDim2.new(0, 289, 0, 42)
+    c["AutoAimFrame"] = e
 
-local function createGUI()
-    local AutoAimFrame = Instance.new("Frame", ScreenGui)
-    AutoAimFrame.Name = "AutoAimFrame"
-    AutoAimFrame.BackgroundTransparency = 1
-    AutoAimFrame.Position = UDim2.new(0.007, 0, 0.938, 0)
-    AutoAimFrame.Size = UDim2.new(0, 289, 0, 42)
-
-    guiElements["AutoAimFrame"] = AutoAimFrame
-
-    local AutoAimLabel = Instance.new("TextLabel", AutoAimFrame)
-    AutoAimLabel.Name = "AutoAimLabel"
-    AutoAimLabel.BackgroundTransparency = 1
-    AutoAimLabel.Position = UDim2.new(0.042, 0, 0, 0)
-    AutoAimLabel.Size = UDim2.new(0, 296, 0, 33)
-    AutoAimLabel.Font = Enum.Font.SourceSansBold
-    AutoAimLabel.Text = "Mode: Teleport"
-    AutoAimLabel.TextColor3 = Color3.new(1, 0, 0)
-    AutoAimLabel.TextScaled = true
-    AutoAimLabel.TextSize = 14
-    AutoAimLabel.TextWrapped = true
-    AutoAimLabel.TextXAlignment = Enum.TextXAlignment.Left
-
-    guiElements["AutoAimLabel"] = AutoAimLabel
+    local f = Instance.new("TextLabel", e)
+    f.Name = "AutoAimLabel"
+    f.BackgroundTransparency = 1
+    f.Position = UDim2.new(0.042, 0, 0, 0)
+    f.Size = UDim2.new(0, 296, 0, 33)
+    f.Font = Enum.Font.SourceSansBold
+    f.Text = "Mode: Teleport"
+    f.TextColor3 = Color3.new(1, 0, 0)
+    f.TextScaled = true
+    f.TextSize = 14
+    f.TextWrapped = true
+    f.TextXAlignment = Enum.TextXAlignment.Left
+    c["AutoAimLabel"] = f
 end
 
-local function destroyGUI()
-    for _, element in pairs(guiElements) do
-        if element then
-            element:Destroy()
+local function g()
+    for h, i in pairs(c) do
+        if i then
+            i:Destroy()
         end
     end
-    guiElements = {}
+    c = {}
 end
 
-local function findNearestPlayer(Position)
-    local List = {unpack(game.Players:GetPlayers())}
-    local Torso, Distance = nil, 15
-
-    for _, v in pairs(List) do
-        if v and v ~= Player then
-            local HumanoidRootPart = v.Character:FindFirstChild("HumanoidRootPart")
-            local Humanoid = v.Character:FindFirstChild("Humanoid")
-
-            if HumanoidRootPart and Humanoid and Humanoid.Health > 0 then
-                local CurrentDistance = (HumanoidRootPart.Position - Position).magnitude
-                if CurrentDistance < Distance then
-                    Torso, Distance = HumanoidRootPart, CurrentDistance
+local function j(k)
+    local l = {unpack(game.Players:GetPlayers())}
+    local m, n = nil, 15
+    for h, o in pairs(l) do
+        if o and o ~= Player then
+            local p = o.Character:FindFirstChild("HumanoidRootPart")
+            local q = o.Character:FindFirstChild("Humanoid")
+            if p and q and q.Health > 0 then
+                local r = p.Position - k.magnitude
+                if r < n then
+                    m, n = p, r
                 end
             end
         end
     end
-
-    return Torso
+    return m
 end
 
-local function aimAtNearestPlayer()
-    if States.AutoAim then
-        local Root = Player.Character:FindFirstChild("HumanoidRootPart")
-        local MousePos = findNearestPlayer(Root.Position)
-
-        if MousePos then
-            if States.Mode == 1 then
-                Player.Character:SetPrimaryPartCFrame(CFrame.new(Vector3.new(MousePos.Position.X, Root.Position.Y, MousePos.Position.Z)))
+local function s()
+    if b.AutoAim then
+        local t = Player.Character:FindFirstChild("HumanoidRootPart")
+        local u = j(t.Position)
+        if u then
+            if b.Mode == 1 then
+                Player.Character:SetPrimaryPartCFrame(CFrame.new(Vector3.new(u.Position.X, t.Position.Y, u.Position.Z)))
             else
-                local Direction = (MousePos.Position - Root.Position).unit
-                Root.CFrame = CFrame.new(Root.Position, Root.Position + Direction)
+                local v = u.Position - t.Position.unit
+                t.CFrame = CFrame.new(t.Position, t.Position + v)
             end
         end
     end
 end
 
-local function onInputBegan(input, gameProcessedEvent)
-    if States.Enabled and input.KeyCode == Enum.KeyCode.B then
-        States.AutoAim = not States.AutoAim
-        if States.AutoAim then
-            aimAtNearestPlayer()
+local function w(x, y)
+    if x.KeyCode == Enum.KeyCode.B then
+        b.AutoAim = not b.AutoAim
+        if b.AutoAim then
+            s()
         end
     end
 end
 
-local function onChatted(player, message)
-    if player == Player then
-        local lowerMessage = message:lower()
-        if lowerMessage == "/mode 1" or lowerMessage == "/mode tp" then
-            States.Mode = 1
-            guiElements["AutoAimLabel"].Text = "Mode: Teleport"
-        elseif lowerMessage == "/mode 2" or lowerMessage == "/mode looking" then
-            States.Mode = 2
-            guiElements["AutoAimLabel"].Text = "Mode: Looking"
-        elseif lowerMessage == "/destroy" then
+local function z(A, B)
+    if A == Player then
+        local C = B:lower()
+        if C == "/mode 1" or C == "/mode tp" then
+            b.Mode = 1
+            c["AutoAimLabel"].Text = "Mode: Teleport"
+        elseif C == "/mode 2" or C == "/mode looking" then
+            b.Mode = 2
+            c["AutoAimLabel"].Text = "Mode: Looking"
+        elseif C == "/destroy" then
             disableScript()
         end
     end
 end
 
-local connectionTable = {}
+local D = {}
 
-local function enableScript()
-    createGUI()
-    States.Enabled = true
-
-    connectionTable["InputBegan"] = UserInputService.InputBegan:Connect(onInputBegan)
-    connectionTable["RenderStepped"] = RunService.RenderStepped:Connect(aimAtNearestPlayer)
-    connectionTable["Chatted"] = Player.Chatted:Connect(onChatted)
+local function E()
+    d()
+    b.Enabled = true
+    D["InputBegan"] = UserInputService.InputBegan:Connect(w)
+    D["RenderStepped"] = RunService.RenderStepped:Connect(s)
+    D["Chatted"] = Player.Chatted:Connect(z)
 end
 
 local function disableScript()
-    destroyGUI()
-    States.Enabled = false
-    States.AutoAim = false
-
-    for _, connection in pairs(connectionTable) do
-        if connection then
-            connection:Disconnect()
+    g()
+    b.Enabled = false
+    b.AutoAim = false
+    for h, F in pairs(D) do
+        if F then
+            F:Disconnect()
         end
     end
-    connectionTable = {}
+    D = {}
 end
 
-ExtraSection:AddToggle("Blatant Mode (B to Toggle)", false, function(toggled)
-    if toggled then
-        enableScript()
+ExtraSection:AddToggle("Blatant Mode (B to Toggle)", false, function(G)
+    if G then
+        E()
     else
         disableScript()
     end
 end)
 
 disableScript()
+
 
 
 
