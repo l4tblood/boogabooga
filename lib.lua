@@ -198,7 +198,6 @@ function library:CreateWindow(name, size, hidebutton)
 	end
 
 	window.Main = Instance.new("ScreenGui", coregui)
-	window.Main.ResetOnSpawn = false
 	window.Main.Name = name
 	window.Main.DisplayOrder = 15
 	
