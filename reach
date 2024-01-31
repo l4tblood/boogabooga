@@ -146,3 +146,107 @@ end)
 MapsSection:AddButton("Teleport to 500m world", function()
     Map5TP()
 end)
+
+local ExtraSection = AimbotTab:CreateSector("Extra+", "right")
+
+ExtraSection:AddToggle("Toggle", false, function(first)
+    local Players = game:GetService("Players")
+    local UserInputService = game:GetService("UserInputService")
+    local RunService = game:GetService("RunService")
+
+    local a = Players.LocalPlayer
+    local b = {AutoAim=false, Mode=1}
+    local toggleState = first -- Use the toggle state directly
+
+    -- Create a new ScreenGui
+    local MainGui = Instance.new("ScreenGui")
+    MainGui.Name = "MainGui"
+    MainGui.Parent = a:WaitForChild("PlayerGui")
+
+    local d = Instance.new("Frame", MainGui)
+    d.Name = "AutoAimFrame"
+    d.BackgroundTransparency = 1
+    d.Position = UDim2.new(0.007, 0, 0.938, 0)
+    d.Size = UDim2.new(0, 289, 0, 42)
+
+    local e = Instance.new("TextLabel", d)
+    e.Name = "AutoAimLabel"
+    e.BackgroundTransparency = 1
+    e.Position = UDim2.new(0.042, 0, 0, 0)
+    e.Size = UDim2.new(0, 296, 0, 33)
+    e.Font = Enum.Font.SourceSansBold
+    e.Text = "Mode: Teleport"
+    e.TextColor3 = Color3.new(1, 0, 0)
+    e.TextScaled = true
+    e.TextSize = 14
+    e.TextWrapped = true
+    e.TextXAlignment = Enum.TextXAlignment.Left
+
+    UserInputService.InputBegan:Connect(function(g)
+        if toggleState and not UserInputService:GetFocusedTextBox() then 
+            b.AutoAim = not b.AutoAim 
+        end 
+    end)
+
+    local function h(i)
+        local j={unpack(Players:GetPlayers())}
+        local k,l=nil,15
+        for m,n in pairs(j) do 
+            if n and n~=a then 
+                local o=n.Character:FindFirstChild("HumanoidRootPart")
+                local p=n.Character:FindFirstChild("Humanoid")
+                if o and p and p.Health>0 then 
+                    local q=o.Position-i.magnitude
+                    if q<l then 
+                        k,l=o,q 
+                    end 
+                end 
+            end 
+        end
+        return k 
+    end
+
+    local function r()
+        if b.AutoAim then 
+            local s=a.Character:FindFirstChild("HumanoidRootPart")
+            local t=h(s.Position)
+            if t then 
+                if b.Mode==1 then 
+                    a.Character:SetPrimaryPartCFrame(CFrame.new(Vector3.new(t.Position.X,s.Position.Y,t.Position.Z)))
+                else 
+                    local u=t.Position-s.Position.unit
+                    s.CFrame=CFrame.new(s.Position,s.Position+u)
+                end 
+            end 
+        end 
+    end
+
+    RunService.RenderStepped:Connect(r)
+
+    local function v()
+        if d then 
+            d:Destroy()
+        end
+        if script then 
+            script:Destroy()
+        end 
+    end
+
+    local function w(x,y)
+        if x==a then 
+            local z=y:lower()
+            if z=="/mode 1"or z=="/mode tp"then 
+                b.Mode=1
+                e.Text="Mode: Teleport"
+            elseif z=="/mode 2"or z=="/mode looking"then 
+                b.Mode=2
+                e.Text="Mode: Looking"
+            elseif z=="/destroy"then 
+                v()
+            end 
+        end 
+    end
+
+    a.Chatted:Connect(w)
+end)
+
