@@ -196,7 +196,7 @@ ExtraSection:AddToggle("Blatant Mode", false, function(toggleState)
                     local o=n.Character:FindFirstChild("HumanoidRootPart")
                     local p=n.Character:FindFirstChild("Humanoid")
                     if o and p and p.Health>0 then 
-                        local q=o.Position-i.magnitude
+                        local q = o.Position - Vector3.new(i.magnitude, i.magnitude, i.magnitude)
                         if q<l then 
                             k,l=o,q 
                         end 
