@@ -92,30 +92,29 @@ end)
 local MapsSection = AimbotTab:CreateSector("Maps", "left")
 
 
-local teleportFunctions = {
-    ["Spawn"] = SpawnTP,
-    ["500k world"] = Map2TP,
-    ["5m world"] = Map3TP,
-    ["50m world"] = Map4TP,
-    ["500m world"] = Map5TP,
-}
+local MapsSection = AimbotTab:CreateSector("Maps", "left")
 
-local selectedMap = nil
-
-local function teleportToSelectedMap()
-    local selectedFunction = teleportFunctions[selectedMap]
-    if selectedFunction then
-        selectedFunction()
-    else
-        print("Selected map is not recognized") -- optional: handle unknown selection
-    end
-end
-
-MapsSection:AddDropdown("Teleport", {"Spawn", "500k world", "5m world", "50m world", "500m world"}, "Worlds", true, function(value)
-    selectedMap = value.Text
+MapsSection:AddButton("Teleport to Spawn", function()
+    local sui = game.Workspace.Spawn1.SurfaceLight
+    game.Players.LocalPlayer.Character:MoveTo(sui.Position)
 end)
 
+MapsSection:AddButton("Teleport to 500k world", function()
+    local sui = game.Workspace.Spawn2.SurfaceLight
+    game.Players.LocalPlayer.Character:MoveTo(sui.Position)
+end)
 
-MapsSection:AddButton("Teleport", function()
-    teleportToSelectedMap()
+MapsSection:AddButton("Teleport to 5m world", function()
+    local sui = game.Workspace.Spawn3.SurfaceLight
+    game.Players.LocalPlayer.Character:MoveTo(sui.Position)
+end)
+
+MapsSection:AddButton("Teleport to 50m world", function()
+    local sui = game.Workspace.Spawn4.SurfaceLight
+    game.Players.LocalPlayer.Character:MoveTo(sui.Position)
+end)
+
+MapsSection:AddButton("Teleport to 500m world", function()
+    local sui = game.Workspace.Spawn5.SurfaceLight
+    game.Players.LocalPlayer.Character:MoveTo(sui.Position)
 end)
