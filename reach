@@ -9,7 +9,7 @@ local AimbotTab = Window:CreateTab("Main")
 
 local ReachSettings = {
     ReachEnabled = false,
-    ReachDistance = 15,
+    ReachDistance = 25,
 }
 
 local function SpawnTP()
@@ -43,9 +43,11 @@ ReachSection:AddToggle("Enable Reach", ReachSettings.ReachEnabled, function(enab
     ReachSettings.ReachEnabled = enabled
 end)
 
-ReachSection:AddSlider("Stud", 0, 30, ReachSettings.ReachDistance, 0.1, function(distance)
-    ReachSettings.ReachDistance = distance
+ReachSection:AddSlider("Stud", 0, 25, ReachSettings.ReachDistance, 1, function(State)
+    ReachSettings.ReachDistance = State
+    print("Updated ReachSettings.ReachDistance to: " .. ReachSettings.ReachDistance)
 end)
+
 
 RunService.Stepped:Connect(function()
     if ReachSettings.ReachEnabled then
