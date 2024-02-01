@@ -182,8 +182,12 @@ local player = game:GetService("Players").LocalPlayer
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Parent = game.CoreGui
 
-ExtraSection:AddButton("Blatant Mode (B to Toggle)", function()
-    -- Blatant Script
+ExtraSection:AddToggle("Blatant Mode (B to Toggle)", false, function(first)
+    local RunService = game:GetService("RunService")
+    local player = game:GetService("Players").LocalPlayer
+    local ScreenGui = Instance.new("ScreenGui")
+    ScreenGui.Parent = game.player.PlayerGui
+
     local States = { AutoAim = false, Mode = 1 }
 
     local AutoAimFrame = Instance.new("Frame", ScreenGui)
