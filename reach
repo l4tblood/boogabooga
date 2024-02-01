@@ -178,50 +178,50 @@ end)
 local ExtraSection = AimbotTab:CreateSector("Extra+", "right")
 
 local connection
+local ScreenGui
 
-ExtraSection:AddToggle("Blatant Mode (B to toggle)", false, function(toggleState)
-if toggleState then
-
+ExtraSection:AddToggle("Blatant Mode (B to toggle)", false, function(first)
     local RunService = game:GetService("RunService")
     local UserInputService = game:GetService("UserInputService")
     local Player = game:GetService("Players").LocalPlayer
-    local ScreenGui = Instance.new("ScreenGui")
-    ScreenGui.Parent = Player.PlayerGui
 
     local States = { AutoAim = false, Mode = 1 }
 
-    local AutoAimFrame = Instance.new("Frame", ScreenGui)
-    AutoAimFrame.Name = "AutoAimFrame"
-    AutoAimFrame.BackgroundTransparency = 1
-    AutoAimFrame.Position = UDim2.new(0.007, 0, 0.938, 0)
-    AutoAimFrame.Size = UDim2.new(0, 289, 0, 42)
+    if first then
+        ScreenGui = Instance.new("ScreenGui")
+        ScreenGui.Parent = Player.PlayerGui
 
-    local AutoAimLabel = Instance.new("TextLabel", AutoAimFrame)
-    AutoAimLabel.Name = "AutoAimLabel"
-    AutoAimLabel.BackgroundTransparency = 1
-    AutoAimLabel.Position = UDim2.new(0.042, 0, 0, 0)
-    AutoAimLabel.Size = UDim2.new(0, 296, 0, 33)
-    AutoAimLabel.Font = Enum.Font.SourceSansBold
-    AutoAimLabel.Text = "Mode: Teleport"
-    AutoAimLabel.TextColor3 = Color3.new(1, 0, 0)
-    AutoAimLabel.TextScaled = true
-    AutoAimLabel.TextSize = 14
-    AutoAimLabel.TextWrapped = true
-    AutoAimLabel.TextXAlignment = Enum.TextXAlignment.Left
+        local AutoAimFrame = Instance.new("Frame", ScreenGui)
+        AutoAimFrame.Name = "AutoAimFrame"
+        AutoAimFrame.BackgroundTransparency = 1
+        AutoAimFrame.Position = UDim2.new(0.007, 0, 0.938, 0)
+        AutoAimFrame.Size = UDim2.new(0, 289, 0, 42)
 
-    local function toggleMode()
-        States.Mode = 3 - States.Mode
-        AutoAimLabel.Text = "Mode: " .. (States.Mode == 1 and "Teleport" or "Looking")
-        AutoAimLabel.TextColor3 = States.AutoAim and Color3.new(0.043, 1, 0.043) or Color3.new(1, 0, 0.016)
-    end
+        local AutoAimLabel = Instance.new("TextLabel", AutoAimFrame)
+        AutoAimLabel.Name = "AutoAimLabel"
+        AutoAimLabel.BackgroundTransparency = 1
+        AutoAimLabel.Position = UDim2.new(0.042, 0, 0, 0)
+        AutoAimLabel.Size = UDim2.new(0, 296, 0, 33)
+        AutoAimLabel.Font = Enum.Font.SourceSansBold
+        AutoAimLabel.Text = "Mode: Teleport"
+        AutoAimLabel.TextColor3 = Color3.new(1, 0, 0)
+        AutoAimLabel.TextScaled = true
+        AutoAimLabel.TextSize = 14
+        AutoAimLabel.TextWrapped = true
+        AutoAimLabel.TextXAlignment = Enum.TextXAlignment.Left
 
-    local function onInputBegan(input, gameProcessedEvent)
-        if input.KeyCode == Enum.KeyCode.B then
-            States.AutoAim = not States.AutoAim
+        local function toggleMode()
+            States.Mode = 3 - States.Mode
+            AutoAimLabel.Text = "Mode: " .. (States.Mode == 1 and "Teleport" or "Looking")
+            AutoAimLabel.TextColor3 = States.AutoAim and Color3.new(0.043, 1, 0.043) or Color3.new(1, 0, 0.016)
         end
-    end
 
-    UserInputService.InputBegan:Connect(onInputBegan)
+        local function onInputBegan(input, gameProcessedEvent)
+            if input.KeyCode == Enum.KeyCode.B then
+                States.AutoAim = not States.AutoAim
+                toggleMode()
+            end
+        end
 
     local function findNearestPlayer(Position)
         local List = {unpack(game.Players:GetPlayers())}
@@ -286,10 +286,10 @@ if toggleState then
             end
         end
     end
-    Player.Chatted:Connect(onChatted)
-end)
-else
+  Player.Chatted:Connect(onChatted)
+        UserInputService.InputBegan:Connect(onInputBegan)
 
+    else
         if connection then
             connection:Disconnect()
             connection = nil
