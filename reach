@@ -177,6 +177,8 @@ end)
 
 local ExtraSection = AimbotTab:CreateSector("Extra+", "right")
 
+local connection
+
 ExtraSection:AddToggle("Blatant Mode (B to toggle)", false, function(first)
     local RunService = game:GetService("RunService")
     local UserInputService = game:GetService("UserInputService")
@@ -256,7 +258,7 @@ ExtraSection:AddToggle("Blatant Mode (B to toggle)", false, function(first)
         end
     end
 
-    RunService.RenderStepped:Connect(aimAtNearestPlayer)
+    connection = RunService.RenderStepped:Connect(aimAtNearestPlayer)
 
     local function destroyScript()
         if AutoAimFrame then
@@ -282,9 +284,23 @@ ExtraSection:AddToggle("Blatant Mode (B to toggle)", false, function(first)
             end
         end
     end
-
     Player.Chatted:Connect(onChatted)
 end)
+else
+
+        if connection then
+            connection:Disconnect()
+            connection = nil
+        end
+
+        if ScreenGui then
+            ScreenGui:Destroy()
+        end
+
+        UserInputService.InputBegan:Disconnect(onInputBegan)
+    end
+end)
+
 
 local LocalPlayer = Players.LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
