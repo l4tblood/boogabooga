@@ -177,7 +177,7 @@ end)
 
 local ExtraSection = AimbotTab:CreateSector("Extra+", "right")
 
-ExtraSection:AddToggle("Blatant Mode (B to Toggle)", false, function(first)
+ExtraSection:AddButton("Blatant Mode (B to Toggle)", function()
     local RunService = game:GetService("RunService")
     local player = game:GetService("Players").LocalPlayer
     local ScreenGui = Instance.new("ScreenGui")
