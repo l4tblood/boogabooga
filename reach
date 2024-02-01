@@ -285,10 +285,6 @@ ExtraSection:AddToggle("Blatant Mode (B to Toggle)", false, function(first)
     Player.Chatted:Connect(onChatted)
 end)
 
-
-
-
-
 local LocalPlayer = Players.LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
 local HighlightColor = Color3.fromRGB(255, 0, 0)
